@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Criminal Law Flashcards</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    font-family: -apple-system;
+    margin: 0;
+    background: #f4f4f4;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+body.dark {
+    background: #1e1e1e;
+    color: #eee;
+}
+#container {
+    max-width: 700px; width: 95%; margin-top: 20px;
+}
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    text-align: center;
+}
+body.dark .card {
+    background: #333; color: #eee;
+}
+.toggle {
+    width: 100%; padding: 10px; margin-top: 10px;
+    background: #555; color: white; border-radius: 8px;
+}
+nav button {
+    padding: 12px 20px; margin: 5px; border-radius: 8px;
+}
+.scoreBtn {
+    padding: 12px 20px; margin: 5px; border-radius: 8px;
+}
+.correct { background: #2ecc71; color: white; }
+.wrong { background: #e74c3c; color: white; }
+</style>
+</head>
+
+<body>
+<div id="container">
+
+<h2>Criminal Law Flashcards (82 cards)</h2>
+
+<button class="toggle" id="darkToggle">Toggle Dark Mode</button>
+<button class="toggle" id="shuffleToggle">Shuffle Mode: OFF</button>
+<button class="toggle" id="wrongOnlyToggle">Review Wrong Only: OFF</button>
+
+<div class="card" id="card">Tap to flip</div>
+
+<nav>
+    <button id="prev">Prev</button>
+    <button id="flip">Flip</button>
+    <button id="next">Next</button>
+</nav>
+
+<div>
+    <button class="scoreBtn correct" id="correctBtn">Got It Right</button>
+    <button class="scoreBtn wrong" id="wrongBtn">Got It Wrong</button>
+</div>
+
+<div id="scoreDisplay">Score: 0 correct / 0 total</div>
+
+</div>
+
+<script>
+const deck = [{"front": "Elements of a crime", "back": ["Required Mens Rea of Crime/MR of Attendant Circ's + Voluntary Actus Reus + Result (for results crimes)"]}, {"front": "Theories of punishment", "back": ["Deterrence, Retribution, Incapacitation, Rehabilitative"]}, {"front": "Deterrence", "back": ["Harsh punishment to stop other people from doing that crime"]}, {"front": "Retribution", "back": ["Punishment is the end goal; punish just to punish"]}, {"front": "Incapacitation", "back": ["If they're not out in society, they can't cause more harm"]}, {"front": "Rehabilitative", "back": ["Treats crime as disease, helps Ds recover"]}, {"front": "MPC: Purposely", "back": ["D had conscious objective to engage in conduct to cause result. Att Circ's: Aware of existence/hoped for ACs"]}, {"front": "MPC: Knowingly", "back": ["D aware their action would cause result."]}, {"front": "MPC: Recklessly", "back": ["D knew of risk; disregarded; gross deviation from social norms"]}, {"front": "MPC: Negligently", "back": ["D should have known of risk; substantial deviation from social norms"]}, {"front": "CL: Intentionally", "back": ["With intent to make crime happen"]}, {"front": "CL: Knowingly", "back": ["With knowledge that crime would happen"]}, {"front": "CL: Malice", "back": ["Depraved and wicked heart murder - acted with DWH with no regard for risk to human life."]}, {"front": "CL: Recklessness", "back": ["Knew/should have known risk -- disregarded"]}, {"front": "CL: Negligent", "back": ["Careless but maybe not knowledgable"]}, {"front": "Muscle spasm", "back": ["MPC - not liable", "CL - not liable as \"voluntary action\""]}, {"front": "Defenses for Actus Reus (unconscious; hypnotized)", "back": ["MPC - can't be liable if uncons. or hypnotized", "CL - can't be liable if unconsc or hypnotized (Newton)"]}, {"front": "Conspiracy Liability - Common law", "back": ["Pinkerton - every act done during / in furtherance of crime carries liability", "Bridges - every foreseeable act done during underlying crime carries liability (doesn't have to be in furtherance of the crime)"]}, {"front": "Conspiracy Liability - MPC", "back": ["Only liable for acts agreed to beforehand for conspiracy liability"]}, {"front": "accomplice liability", "back": ["MPC: same as CL", "CL: have to either ACTIVELY help or convey that you will help (emboldening principal) - charged as \"Murder through Accomplice liability\". not liable if actions don't actually help principal"]}, {"front": "that one weird MPC thing for conspiracy / attempt liability", "back": ["MPC only: can be held liable for attempt under conspiracy if crime was conducted but you were NOT accomplice", "CL: you can only be charged for attempt if you were an accomplice (usually have to be present unless you materially helped)"]}, {"front": "Attempt (but crime incomplete) / Mens Rea exceptions", "back": ["Both the same: can't be held liable for attempt of an unintentional crime (where mens rea is only negligence OR unintentional homicide)"]}, {"front": "Felony Murder / Misdemeanor Manslaughter", "back": ["MPC: doesn't exist. CL: If murder happened during the course of a felony OR misdemeanor, might be liable"]}, {"front": "Felony Murder / Misdemeanor Manslaughter (3 JXs for calculation)", "back": ["MPC: No felony murder", "CL: Inherently Dangerous Theory test (used in CA) - is there ANY way to conduct the crime  that doesn't create risk of harm others? ; Actual cause test (GA) - in this case, was it harmful?"]}, {"front": "Renunciation for conspiracy (active) or accomplice liability", "back": ["Both are the same: must spring freely from the heart; CANNOT be bc the means of crime are taken away (like items being less valuable); must be acknowledged by coventurers AND take away ability to conduct crime. Either by stopping it or contacting the police w/ reasonable notice"]}, {"front": "Renunciation for conspiracy (passive)", "back": ["Both same: you can renounce by coconspirators/you doing nothing beyond discussion - statute of limitations if not charged earlier"]}, {"front": "Attempt - two tests", "back": ["CL: Jackson - dangerous proximity- need a real victim / means of crime nearby with IMMINENT danger of conducting", "CL/MPC: Rizzo - substantial step - are you well on your way to conducting the crime? Did you buy the rope/shovel, matches/gasoline, etc for the crime? Don't need a REAL victim nearby."]}, {"front": "Homicides", "back": []}, {"front": "Mens Rea : Malice (gross recklessness)", "back": ["MPC: Murder - no difference in degrees (unless in statute like Arson-related but not a domicile, etc)", "CL: Depraved Heart Murder; Murder - 2 JXs: Carroll (PA) & Guthrie (WV) - 1st & 2nd degree"]}, {"front": "Mens Rea : Intentional / knowingly / purposefully", "back": ["MPC : Murder", "CL : Murder"]}, {"front": "CL - 1st and 2nd degree", "back": ["Carroll: 1st degree - intent can be formed in the moment of the action", "Guthrie: 2nd degree Intent requires premeditation, planning, evidence of being \"heat of the moment\" helps"]}, {"front": "MPC - MR - without Malice - Manslaughter", "back": ["Defense of Extreme Emotional Distress (NOT of Def's own making)"]}, {"front": "CL - MR - w/out malice - intentional - Manslaughter (Girouard)", "back": ["Provocation defense - Girouard - duel, extreme assault, def. against illegal arrest, defense of family being attacked, sudden discovery of affair"]}, {"front": "CL - MR - w/out malice - Manslaughter (Maher)", "back": ["1) D under influence of passion 2) reasonable provocation (RP standard; words are enough) 3) No opp'ty for blood to cool (temp. prox.) 4) causation between passion, provocation, and fatal act"]}, {"front": "MPC -  Perfect Self Defense", "back": ["MPC: hinges on reasonable belief of defendant regarding need to imminently use deadly force (victim can be asleep if pattern est'd); ALWAYS have duty to retreat in MPC. Cannot be initiator.", "D's reasonable belief of need to act imminently; V can be asleep"]}, {"front": "CL - Perfect Self Defense", "back": ["CL: harm must be imminent; use of force must be proportionate; JX split on duty to retreat vs Castle Doctrine (discuss both). Cannot be initiator. Can withdraw actively if initiator", "Hinges on acts of V; V must be conscious and attacking D"]}, {"front": "Initiator re: defense", "back": ["MPC / CL : same - can't be initiator for defense doctrine; can withdraw as instigator if other party can walk away -- if invol. attacked again, then you are no longer instigator"]}, {"front": "Duty to retreat", "back": ["MPC: always have duty to retreat if it's reasonably safe to do so", "CL: Split JX - some have duty to retreat; some have Castle Doctrine"]}, {"front": "MPC - Imperfect Self Defense (MR = Recklessness)", "back": ["Honest (even if unreasonable) belief of D. that they must act imminently for an impending deadly harm. Result: Murder charge = manslaughter", "Hinges on beliefs of the defendant ; victim can be asleep"]}, {"front": "CL - Imp Self Def", "back": ["Applicable if D had unreasonable fear of imminent harm; D must believe (reasonably or not) that use of deadly force is necessary. Submitted as a mitigating factor. Result: Murder charge = manslaughter"]}, {"front": "WA state statute (manslaughter v murder for DV victims)", "back": ["Made a clause for DV victims to have special considerations in their actions"]}, {"front": "Involuntary Manslaughter", "back": ["MPC: Manslaughter (reckless)", "CL: Mens Rea is recklessness or gross negligence - they knew or should have known of the extreme risks - Welanski night club fire ; Flemming (russian roulette); Root (drag racing)"]}, {"front": "Arzon", "back": ["D set 1 fire; fireman responded to another in same building and died. Rule: if you contributed to the problem, even if it's not a direct cause, you're liable for murder"]}, {"front": "Costa (Helicopters)", "back": ["Car chase; helicopters crashed... pilots' negligence was superseding cause of accident. Accident was not foreseeable with actions of car chase."]}, {"front": "Welanski", "back": ["Night club fire -- blocked exits. Did not cause fire, but knew or should have known of the risks of blocked exits bc he was onsite regularly. Charged with involuntary manslaughter bc of recklessness."]}, {"front": "Hall", "back": ["Skiing case; court rule he was reckless - MPC takes into acct unique characteristics (training, prior experience in skiing)"]}, {"front": "Crumbley", "back": ["School shooter parents - convicted of crim. negl. homicide - failed to act, provided gun, didn't lock up gun, didn't pull son from school"]}, {"front": "Recklessness for Manslaughter", "back": ["MPC: D's individual characteristics count; CL: no unique characteristics considered"]}, {"front": "Homicide", "back": []}, {"front": "Malice", "back": ["Murder (no degrees)"]}, {"front": "Purposefully/Knowingly/Willfully", "back": ["MPC: Murder", "CL: Intent to kill/cause bodily injury = murder"]}, {"front": "Recklessly/Wantonly/Silent on MR", "back": []}, {"front": "Negligently", "back": ["MPC: crim. neglig. homicide", "CL: no charge exists for Negligent homicide"]}, {"front": "Transferred Intent", "back": ["Mens Rea for crime against 1 victim = transfers to other victim"]}, {"front": "Lesser Crime Principle", "back": ["Both MPC and CL: If guilty of lesser crime, can't use mistake of fact as defense"]}, {"front": "Mistake of Law", "back": ["D relied on a statement that law was different from what it is. D must rely on an official source of law for misinterpretation - eg: statute; agent of the law; issued statement from official source; LAWYER does not count. D must prove that if law was different, mens rea element is negated"]}, {"front": "Mistake of Law - cases:", "back": ["Lambert: crime of ommission - didn't know they had to register when they moved (MoL allowed); Gardner - misunderstood statute (MoL not allowed); Weiss: kidnapping bc detective said they could (MoL not allowed)"]}, {"front": "Mistake of Fact", "back": ["D believes the different facts; negates the mens rea. MPC: MR negated ; CL: Specific Intent - Honest; General Intent - Reasonable, honest. Does not work if MR is recklessness or negligence."]}, {"front": "General Intent Crimes", "back": ["All crimes that are not specific intent: eg - sexual assault, assault, rape, arson, etc."]}, {"front": "Specific Intent Crimes", "back": ["Mens Rea = knowingly/purposefully. D wants results: burglary/theft, fraud, embezzlement, solicitation, forgery, larceny"]}, {"front": "Weird SSN Case", "back": ["SSN made up, D didn't realize it was really someone else's - no Mens Rea of knowingly, can't be charged with FRAUD."]}, {"front": "Strict liability (MPC)", "back": ["Does not exist"]}, {"front": "Strict liability cases (CL)", "back": ["Pros. doesn't need to prove Mens Rea. Statutory Rape, selling alcohol to minor, pharmaceutical and food labeling things"]}, {"front": "Defense: Vol Intoxication (MPC)", "back": ["MPC: Allowed for crimes with MR of Purp./Knowingly; NOT for Recklessly/Negligently"]}, {"front": "Defense: Vol Intoxication (CL)", "back": ["CL: most states - only allowed for specific intent crimes; some states - only allowed for premeditated murder; 14 states - not allowed, ever"]}, {"front": "Causation: Intervening Acts (Not Foreseeable)", "back": ["De minimis contribution (Acosta); independent intervening cause; free, deliberate, & informed / reckless human intervention (Campbell - free will for suicide -- D provided gun) (Root: drag racing, recklessness to change lanes)"]}, {"front": "Causation: Intervening Acts (foreseeable)", "back": ["Forced act (public service); responsive dependent intervening cause (med. neglig. ONLY cause of death); intended consq's/transferred intent; vulnerable victim; omissions for special relationships"]}, {"front": "WIlliams v State", "back": ["Indigenous family had baby die without medical intervention due to fear of baby being taken away. Had reasonable capacity to seek help."]}, {"front": "Shabazz", "back": ["Med negligence was ONLY cause in death"]}, {"front": "Specif. Intent crimes: defenses", "back": ["voluntary intoxication, diminished capacity, insanity, mistake of fact, mistake of law"]}, {"front": "Morrissette", "back": ["Conv. of US gov't property scrap metal; est'd mens rea required if non public welfare offense (not strict liability)"]}, {"front": "Staples", "back": ["MR element req'd for gun ownership law; didn't know it was semi-automatic"]}, {"front": "Balint", "back": ["Strict liability - selling narcotics without proper documentation"]}, {"front": "Dotterweich", "back": ["Repackaged meds, sold with new label - officer of the company was held liable"]}, {"front": "Behrman", "back": ["Doc overprescribed narcotics"]}, {"front": "Insanity defense - different tests", "back": ["M'Naghten; Irresistible Impulse; MPC (loose); Insanity defense barred"]}, {"front": "M'Naghten", "back": ["Incapacity: Cognitive - D did not understand severity of the crime; Moral - D did know, but did not understand it was morally wrong"]}, {"front": "Irrresistible impulse", "back": ["Strict - operating at 0% capacity such that they cannot control actions (volitional) OR distinguish right/wrong (cognitive)"]}, {"front": "MPC approach", "back": ["Loose - cognitive: D lacks subst capac. to know wrongfulness; volitional: can't conform conduct to the law"]}, {"front": "Insanity defense barred", "back": ["Never allowed - Kahler - no NGI def allowed; D may provide evidence of mental defect to negate mens rea (to achieve diminished capacity)"]}, {"front": "Diminished capacity", "back": ["Twinky defense; negates mens rea element bc they don't have capacity to form the mens rea"]}, {"front": "Duress Defense", "back": ["D was coerced into the crime under threat of immediate death or severe bodily harm; reasonable fear; lack of free will - eligible under MPC/CL"]}];
+let originalDeck = [...deck];
+let wrongCards = [];
+let reviewWrongOnly = false;
+
+let index = 0;
+let showingFront = true;
+let shuffleMode = false;
+
+let correct = 0;
+let total = 0;
+
+function updateScore() {
+    document.getElementById("scoreDisplay").innerText =
+        "Score: " + correct + " correct / " + total + " total";
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function renderCard() {
+    let c = deck[index];
+    if (!c) {
+        document.getElementById("card").innerHTML = "No cards.";
+        return;
+    }
+    if (showingFront) {
+        document.getElementById("card").innerHTML = c.front;
+    } else {
+        let items = "<ul>";
+        for (let b of c.back) items += "<li>" + b + "</li>";
+        items += "</ul>";
+        document.getElementById("card").innerHTML = items;
+    }
+}
+
+document.getElementById("flip").onclick = () => {
+    showingFront = !showingFront; renderCard();
+};
+document.getElementById("next").onclick = () => {
+    index = (index + 1) % deck.length; showingFront = true; renderCard();
+};
+document.getElementById("prev").onclick = () => {
+    index = (index - 1 + deck.length) % deck.length; showingFront = true; renderCard();
+};
+
+document.getElementById("darkToggle").onclick = () => {
+    document.body.classList.toggle("dark");
+};
+
+document.getElementById("shuffleToggle").onclick = () => {
+    shuffleMode = !shuffleMode;
+
+    if (shuffleMode) {
+        document.getElementById("shuffleToggle").innerText = "Shuffle Mode: ON";
+        shuffle(deck);
+    } else {
+        document.getElementById("shuffleToggle").innerText = "Shuffle Mode: OFF";
+        deck = [...originalDeck];
+    }
+    index = 0; renderCard();
+};
+
+document.getElementById("wrongOnlyToggle").onclick = () => {
+    reviewWrongOnly = !reviewWrongOnly;
+
+    if (reviewWrongOnly) {
+        deck = [...wrongCards];
+        document.getElementById("wrongOnlyToggle").innerText = "Review Wrong Only: ON";
+    } else {
+        deck = [...originalDeck];
+        document.getElementById("wrongOnlyToggle").innerText = "Review Wrong Only: OFF";
+    }
+
+    index = 0; renderCard();
+};
+
+document.getElementById("correctBtn").onclick = () => {
+    correct++; total++; updateScore();
+};
+document.getElementById("wrongBtn").onclick = () => {
+    wrongCards.push(deck[index]); total++; updateScore();
+};
+
+let startX=0, startY=0;
+document.addEventListener("touchstart", e => {
+    startX = e.changedTouches[0].screenX;
+    startY = e.changedTouches[0].screenY;
+});
+document.addEventListener("touchend", e => {
+    let dx = e.changedTouches[0].screenX - startX;
+    let dy = e.changedTouches[0].screenY - startY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 40) document.getElementById("prev").click();
+        if (dx < -40) document.getElementById("next").click();
+    } else {
+        if (dy < -40) document.getElementById("flip").click();
+        if (dy > 40) document.getElementById("wrongOnlyToggle").click();
+    }
+});
+
+renderCard();
+updateScore();
+</script>
+
+</body>
+</html>
